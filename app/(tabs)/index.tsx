@@ -1,98 +1,105 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Button, KeyboardAvoidingView, Platform, TouchableOpacity,
+   SafeAreaView, StyleSheet, TextInput, View, 
+   Text} from 'react-native';
 
 import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Link } from 'expo-router';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <SafeAreaView 
+     style={style.container}>
+      <KeyboardAvoidingView 
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{flex:1}}
+       >
+      <View style={style.topText}>
+        To Do
+        <MaterialIcons name="book" style={style.icon} size={24} color="white" />
+      </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      <View 
+      style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%'}}>
+        <View
+        style={style.topInput}
+        >
+        <TextInput 
+        placeholder='Write your to do...'
+        multiline 
+        value=""
+        style={style.txtIpt}
+        
+        />
+        </View>
+          <TouchableOpacity style={style.bttn}>
+            <Text>ADD</Text>
+          </TouchableOpacity>
+      </View>
+      
+      <View style={{display:'flex', width:'100%', justifyContent:'center', marginTop:40 }}>
+        <View style={{ minWidth:'90%', height:1, backgroundColor:'white'}}>
+
+        </View>
+      </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+const style = StyleSheet.create({
+  container: {
+    backgroundColor:'black',
+    flex:1,
+    width: '100%',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  topText:{
+    display:'flex',
+    color:'white',
+    marginTop: 50,
+    textAlign: 'center',
+    textTransform:'uppercase',
+
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+
+  icon:{
+    backgroundColor:'purple',
+    width:50,
+    height:50,
+    padding:6,
+    margin:'auto',
+    borderRadius:100,
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    marginTop:4
   },
-});
+
+  topInput:{
+    display:'flex',
+    backgroundColor:'skyblue',
+    minWidth:'80%',
+    borderRadius:20,
+    marginTop:50,
+     },
+
+     txtIpt:{
+      outline:'none',
+      borderWidth:0, borderRadius:10,
+      padding:6, backgroundColor:'skyblue',
+      fontSize:15,
+     },
+
+     bttn:{
+      backgroundColor:'white',
+      padding:10, margin:5, 
+      paddingRight:20,
+      paddingLeft:20,
+      fontSize:15,
+      marginTop: 20,
+      }
+})
