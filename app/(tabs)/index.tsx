@@ -1,16 +1,47 @@
-import { Image } from 'expo-image';
-import { Button, KeyboardAvoidingView, Platform, TouchableOpacity,
-   SafeAreaView, StyleSheet, TextInput, View, 
-   Text} from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
-
+import { useState } from 'react';
+import {
+  Keyboard,
+  KeyboardAvoidingView, Platform,
+  SafeAreaView, StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import ToDoList from '../components/toDoList';
 export default function HomeScreen() {
+
+  const [todos, setTodos] = useState([])
+  const [input, setInput] = useState('')
+
+  const addTodo = () => {
+     if(!input.trim()) return
+     setTodos((prev) => [
+      ...prev,
+      {id:Date.now().toString(), text:input, done:false},
+     ]);
+     setInput(""); 
+     Keyboard.dismiss();
+  }
+
+  const toggleToDo = (id) => {
+
+      setTodos((prev) => 
+        prev.map((todo) => todo?.id === id ? {...todo, done: !todo?.done}: todo
+      )
+    )
+    }
+
+  const deleteTodo = (id) => {
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  }
+
+  const toggleTodo = (id) => {
+    setTodos((prev) => 
+      prev.map((todo) => todo.id === id ? {...todo, done: !todo.done } : todo)
+    )
+  }
   return (
     <SafeAreaView 
      style={style.container}>
@@ -19,7 +50,7 @@ export default function HomeScreen() {
       style={{flex:1}}
        >
       <View style={style.topText}>
-        To Do
+        <Text style={{color:'white', fontSize: 20, textDecorationStyle:'uppercase'}}>To Do</Text>
         <MaterialIcons name="book" style={style.icon} size={24} color="white" />
       </View>
 
@@ -31,20 +62,21 @@ export default function HomeScreen() {
         <TextInput 
         placeholder='Write your to do...'
         multiline 
-        value=""
+        value={input}
+        onChangeText={setInput}
         style={style.txtIpt}
         
         />
         </View>
-          <TouchableOpacity style={style.bttn}>
+          <TouchableOpacity onPress={addTodo} style={style.bttn}>
             <Text>ADD</Text>
           </TouchableOpacity>
       </View>
       
-      <View style={{display:'flex', width:'100%', justifyContent:'center', marginTop:40 }}>
+      <View style={{display:'flex', width:'100%', justifyContent:'center', marginTop:20}}>
         <View style={{ minWidth:'90%', height:1, backgroundColor:'white'}}>
-
         </View>
+        <ToDoList todos={todos} deleteTodo={deleteTodo} toggleTodo={toggleTodo}/>
       </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -59,9 +91,11 @@ const style = StyleSheet.create({
   },
   topText:{
     display:'flex',
-    color:'white',
-    marginTop: 50,
+    color:'#fff',
+    fontSize: 20,
+    marginTop: 100,
     textAlign: 'center',
+    alignItems: 'center',
     textTransform:'uppercase',
 
   },
@@ -70,13 +104,13 @@ const style = StyleSheet.create({
     backgroundColor:'purple',
     width:50,
     height:50,
-    padding:6,
-    margin:'auto',
+    padding:12,
+    marginTop: 5,
     borderRadius:100,
     display:'flex',
     justifyContent:'center',
     alignItems:'center',
-    marginTop:4
+    textAlign:'center',
   },
 
   topInput:{
@@ -90,7 +124,7 @@ const style = StyleSheet.create({
      txtIpt:{
       outline:'none',
       borderWidth:0, borderRadius:10,
-      padding:6, backgroundColor:'skyblue',
+      padding:15, backgroundColor:'skyblue',
       fontSize:15,
      },
 
@@ -102,4 +136,6 @@ const style = StyleSheet.create({
       fontSize:15,
       marginTop: 20,
       }
+
+
 })
