@@ -12,23 +12,25 @@ const ToDoList = ({todos, deleteTodo, toggleTodo}:Todo) => {
    
 
     return(
-        <FlatList  
+        <FlatList 
         data={todos}
         keyExtractor={(item) => item?.id}
         renderItem ={({item}) => (
             <TouchableOpacity 
             onPress={() => toggleTodo(item?.id)}    
-            onLongPress = {() => deleteTodo(item?.id)}
-            style={style.todoList}
+            onLongPress = {() => deleteTodo(item.id)}
+    
             >
                 <Text style={[style.text, item.done && style.strikeDone]}>
                     {item.text}
                 </Text>
             </TouchableOpacity>
         ) }
-        >
+        contentContainerStyle={{ paddingBottom: 100 }} 
+        style={{ flex: 1 }}
+        />
 
-        </FlatList>
+       
 
     )
 }
